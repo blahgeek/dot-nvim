@@ -77,11 +77,6 @@ Plug 'honza/vim-snippets'
 let g:closetag_filenames = '*.html,*.xml,*.js,*.jsx'
 Plug 'alvan/vim-closetag'
 
-" Filetype supports
-Plug 'sheerun/vim-polyglot'
-" ftplugin/fish is very slow (would execute fish)
-" let g:polyglot_disabled = ['fish']
-
 Plug 'tpope/vim-surround'
 
 " let g:detectindent_preferred_expandtab = 1
@@ -120,8 +115,6 @@ nnoremap <C-s> :Gstatus<CR>
 let g:autoformat_retab = 0
 Plug 'Chiel92/vim-autoformat'
 
-Plug 'davidoc/taskpaper.vim'
-
 " Plug 'majutsushi/tagbar'
 " }}}
 
@@ -147,8 +140,17 @@ nmap gd :YcmCompleter GoTo<CR>
 cnoreabbrev fix YcmCompleter FixIt
 " }}}
 
+" {{{ Filetypes support
+" Filetype supports
+Plug 'sheerun/vim-polyglot'
+" ftplugin/fish is very slow (would execute fish)
+" let g:polyglot_disabled = ['fish']
+
+Plug 'davidoc/taskpaper.vim'
+
+" }}}
+
 " TODO: i3wm & vim panes
-" TODO: tasks format
 
 call plug#end()
 
