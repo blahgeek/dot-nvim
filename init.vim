@@ -112,8 +112,10 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-fugitive'
 nnoremap <C-s> :Gstatus<CR>
 
-let g:autoformat_retab = 0
-Plug 'Chiel92/vim-autoformat'
+" let g:autoformat_retab = 0
+" Plug 'Chiel92/vim-autoformat'
+
+Plug 'sbdchd/neoformat'
 
 " Plug 'majutsushi/tagbar'
 " }}}
@@ -141,10 +143,13 @@ cnoreabbrev fix YcmCompleter FixIt
 " }}}
 
 " {{{ Filetypes support
-" Filetype supports
-Plug 'sheerun/vim-polyglot'
+
 " ftplugin/fish is very slow (would execute fish)
-" let g:polyglot_disabled = ['fish']
+let g:polyglot_disabled = ['javascript', 'jsx']
+Plug 'sheerun/vim-polyglot'
+
+let g:jsx_improve_motion_disable = 1
+Plug 'chemzqm/vim-jsx-improve'
 
 Plug 'davidoc/taskpaper.vim'
 
@@ -278,5 +283,5 @@ augroup vimrc_augroup
     " React to window resize
     autocmd VimResized * wincmd =
     autocmd VimResized * redraw!
-    autocmd BufWritePre *.go :Autoformat
+    autocmd BufWritePre *.go :Neoformat
 augroup END
