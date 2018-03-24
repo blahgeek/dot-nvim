@@ -83,6 +83,9 @@ Plug 'tpope/vim-surround'
 " let g:detectindent_preferred_indent = 4
 " let g:detectindent_verbosity = 0
 " Plug 'ciaranm/detectindent'
+
+Plug 'lilydjwg/fcitx.vim'
+
 " }}}
 
 " ALE Linters {{{
