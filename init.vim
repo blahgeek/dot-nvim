@@ -275,14 +275,21 @@ function s:update_colorscheme()
         AirlineRefresh
     endif
     colorscheme solarized8
+
+    " set ALESign background like LineNr
+    if $SUNWAIT_STATUS ==? 'DAY'
+        hi Error guibg=#eee8d5 ctermbg=254
+        hi Todo guibg=#eee8d5 ctermbg=254
+    else
+        hi Error guibg=#073642 ctermbg=236
+        hi Todo guibg=#073642 ctermbg=236
+    endif
+
 endfunction
 
 command! UpdateColorscheme call s:update_colorscheme()
 call s:update_colorscheme()
 
-" set ALESign background like LineNr
-hi Error guibg=#073642 ctermbg=236
-hi Todo guibg=#073642 ctermbg=236
 " }}}
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
