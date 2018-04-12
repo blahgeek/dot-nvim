@@ -17,8 +17,8 @@ Plug 'airblade/vim-rooter'
 "}}}
 
 " Appearance {{{
-let g:airline_theme = 'solarized'
-let g:airline_solarized_bg = 'dark'
+
+" See ColorScheme section
 " let g:airline_powerline_fonts = 1
 let g:airline_symbols_ascii = 1
 let g:airline#extensions#default#layout = [
@@ -259,9 +259,27 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 " }}}
 
 " Colorscheme {{{
+
 set termguicolors
-set background=dark
-colorscheme solarized8
+let g:airline_theme = 'solarized'
+
+function s:update_colorscheme()
+    if $SUNWAIT_STATUS ==? 'DAY'
+        let g:airline_solarized_bg = 'light'
+        set background=light
+    else
+        let g:airline_solarized_bg = 'dark'
+        set background=dark
+    endif
+    if exists(':AirlineRefresh')
+        AirlineRefresh
+    endif
+    colorscheme solarized8
+endfunction
+
+command! UpdateColorscheme call s:update_colorscheme()
+call s:update_colorscheme()
+
 " set ALESign background like LineNr
 hi Error guibg=#073642 ctermbg=236
 hi Todo guibg=#073642 ctermbg=236
