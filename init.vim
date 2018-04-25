@@ -111,7 +111,8 @@ Plug 'sbdchd/neoformat'
 
 " LSP + Deoplete {{{
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
+" I would manually enable it on InsertEnter
+let g:deoplete#enable_at_startup = 0
 
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
@@ -195,6 +196,7 @@ call plug#end()
 augroup plug_lazyload_insert
     autocmd!
     autocmd InsertEnter * call plug#load('ultisnips')
+                \| call deoplete#enable()
                 \| autocmd! plug_lazyload_insert
 augroup END
 
