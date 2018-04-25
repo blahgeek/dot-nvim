@@ -88,23 +88,6 @@ Plug 'lilydjwg/fcitx.vim'
 
 " }}}
 
-" ALE Linters {{{
-let g:ale_linters = {
-            \    'c': ['gcc'],
-            \    'cpp': ['g++'],
-            \    'python': ['flake8'],
-            \    'go': ['go build', 'gofmt']
-            \}
-let g:ale_set_highlights = 0
-let g:ale_sign_column_always = 1
-set signcolumn=yes
-let g:ale_echo_delay = 200
-let g:ale_echo_msg_format = '[%linter%] %s'
-let g:ale_rust_cargo_use_check = 1
-let g:airline#extensions#ale#enabled = 1
-Plug 'w0rp/ale'
-" }}}
-
 " Tools Integration Plugins {{{
 Plug 'airblade/vim-gitgutter'
 
@@ -126,26 +109,70 @@ Plug 'sbdchd/neoformat'
 " Plug 'majutsushi/tagbar'
 " }}}
 
-" YouCompleteMe {{{
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_enable_diagnostic_signs = 0
-let g:ycm_enable_diagnostic_highlighting = 0
-let g:ycm_echo_current_diagnostic = 0
-let g:ycm_collect_identifiers_from_tags_files = 1
+" LSP + Deoplete {{{
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 
-" Common C/CXX Flags, initial value same as ale_c_gcc_options
-let g:common_c_flags = ['-std=c11']
-let g:common_cxx_flags = ['-std=c++14']
-let g:ycm_extra_conf_vim_data = ['g:common_c_flags', 'g:common_cxx_flags']
-let g:ycm_global_ycm_extra_conf = '~/.config/nvim/extra/ycm_extra_conf.py'
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
-let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
-let g:ycm_rust_src_path = '/usr/src/rust/src/'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all', 'on': []}
-nmap gd :YcmCompleter GoTo<CR>
-cnoreabbrev fix YcmCompleter FixIt
+" close preview window after insertion
+augroup auto_close_preview_window
+    autocmd!
+    autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+    " autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+augroup END
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+let g:LanguageClient_serverCommands = {
+    \ 'cpp': ['cquery'],
+    \ 'c': ['cquery'],
+    \ 'java': ['jdtls'],
+    \ 'python': ['pyls'],
+    \ 'rust': ['rls'],
+    \ }
+" TODO: highlights from gitgutter are used here
+let g:LanguageClient_diagnosticsDisplay =
+            \    {
+            \        1: {
+            \            "name": "Error",
+            \            "texthl": "Error",
+            \            "signText": "--",
+            \            "signTexthl": "GitGutterDelete",
+            \        },
+            \        2: {
+            \            "name": "Warning",
+            \            "texthl": "Ignore",
+            \            "signText": "--",
+            \            "signTexthl": "GitGutterChange",
+            \        },
+            \        3: {
+            \            "name": "Information",
+            \            "texthl": "Ignore",
+            \            "signText": "--",
+            \            "signTexthl": "SignColumn",
+            \        },
+            \        4: {
+            \            "name": "Hint",
+            \            "texthl": "Ignore",
+            \            "signText": "--",
+            \            "signTexthl": "SignColumn",
+            \        },
+            \    }
+let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/lsp/settings.json'
+let g:LanguageClient_fzfOptions = ''
+
+nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
 " }}}
 
 " {{{ Filetypes support
@@ -167,7 +194,7 @@ call plug#end()
 
 augroup plug_lazyload_insert
     autocmd!
-    autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+    autocmd InsertEnter * call plug#load('ultisnips')
                 \| autocmd! plug_lazyload_insert
 augroup END
 
@@ -196,6 +223,7 @@ set cursorline
 set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
+set hidden
 " }}}
 
 let g:python_host_prog = '/usr/bin/python2'
@@ -260,6 +288,7 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 
 " Colorscheme {{{
 
+set signcolumn=yes
 set termguicolors
 let g:airline_theme = 'solarized'
 
@@ -275,16 +304,6 @@ function s:update_colorscheme()
         AirlineRefresh
     endif
     colorscheme solarized8
-
-    " set ALESign background like LineNr
-    if $SUNWAIT_STATUS ==? 'DAY'
-        hi Error guibg=#eee8d5 ctermbg=254
-        hi Todo guibg=#eee8d5 ctermbg=254
-    else
-        hi Error guibg=#073642 ctermbg=236
-        hi Todo guibg=#073642 ctermbg=236
-    endif
-
 endfunction
 
 command! UpdateColorscheme call s:update_colorscheme()
