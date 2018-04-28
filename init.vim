@@ -12,7 +12,7 @@ Plug 'embear/vim-localvimrc'
 
 let g:rooter_change_directory_for_non_project_files = 'current'
 " '.git' is needed because for git worktree, `.git` is not a directory
-let g:rooter_patterns = ['.git/', '.git', '.lvimrc', '.tags', 'tags']
+let g:rooter_patterns = ['.git/', '.git', '.lvimrc', '.tags', 'tags', 'pom.xml']
 Plug 'airblade/vim-rooter'
 "}}}
 
@@ -111,6 +111,8 @@ Plug 'sbdchd/neoformat'
 
 " LSP + Deoplete {{{
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" source from syntax file
+Plug 'Shougo/neco-syntax', { 'do': ':UpdateRemotePlugins' }
 " I would manually enable it on InsertEnter
 let g:deoplete#enable_at_startup = 0
 
@@ -132,10 +134,10 @@ Plug 'autozimu/LanguageClient-neovim', {
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['cquery'],
     \ 'c': ['cquery'],
-    \ 'java': ['jdtls'],
     \ 'python': ['pyls'],
     \ 'rust': ['rls'],
     \ }
+" \ 'java': ['jdtls', '-Dlog.level=ALL', '-Djdt.ls.debug=1'],
 " TODO: highlights from gitgutter are used here
 let g:LanguageClient_diagnosticsDisplay =
             \    {
@@ -173,6 +175,7 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
 nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+set formatexpr=LanguageClient#textDocument_rangeFormatting()
 
 " }}}
 
