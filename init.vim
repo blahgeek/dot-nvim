@@ -136,6 +136,7 @@ let g:LanguageClient_serverCommands = {
     \ 'c': ['cquery'],
     \ 'python': ['pyls'],
     \ 'rust': ['rls'],
+    \ 'java': [expand('<sfile>:p:h') . '/lsp/jdtls.wrapper.sh']
     \ }
 " \ 'java': ['jdtls', '-Dlog.level=ALL', '-Djdt.ls.debug=1'],
 " TODO: highlights from gitgutter are used here
