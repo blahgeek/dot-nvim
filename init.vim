@@ -84,7 +84,7 @@ Plug 'tpope/vim-surround'
 " let g:detectindent_verbosity = 0
 " Plug 'ciaranm/detectindent'
 
-Plug 'lilydjwg/fcitx.vim'
+Plug 'lilydjwg/fcitx.vim', {'on': []}
 
 " }}}
 
@@ -201,7 +201,7 @@ call plug#end()
 
 augroup plug_lazyload_insert
     autocmd!
-    autocmd InsertEnter * call plug#load('ultisnips')
+    autocmd InsertEnter * call plug#load('ultisnips', 'fcitx.vim')
                 \| call deoplete#enable()
                 \| autocmd! plug_lazyload_insert
 augroup END
