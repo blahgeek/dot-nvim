@@ -267,6 +267,7 @@ set inccommand=nosplit
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
 set hidden
 set shortmess+=c
+set updatetime=100
 " }}}
 
 let g:python_host_prog = '/usr/bin/python2'
