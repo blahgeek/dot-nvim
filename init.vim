@@ -18,26 +18,59 @@ Plug 'airblade/vim-rooter'
 
 " Appearance {{{
 
-" See ColorScheme section
-" let g:airline_powerline_fonts = 1
-let g:airline_symbols_ascii = 1
-let g:airline#extensions#default#layout = [
-            \ [ 'a', 'b', 'c' ],
-            \ [ 'x', 'y', 'error', 'warning' ]
-            \ ]
-let g:airline#extensions#default#section_truncate_width = {
-            \ 'b': 79,
-            \ 'x': 60,
-            \ 'y': 45,
-            \ 'warning': 60,
-            \ 'error': 60,
+function! s:QuickfixCountType(typ)
+    let l:ret = 0
+    for entry in getqflist()
+        if entry.type ==# a:typ
+            let l:ret = l:ret + 1
+        endif
+    endfor
+    if l:ret == 0
+        return ''
+    else
+        return a:typ . ':' . l:ret
+    endif
+endfunction
+
+function! QuickfixCountError()
+    return s:QuickfixCountType('E')
+endfunction
+
+function! QuickfixCountWarning()
+    return s:QuickfixCountType('W')
+endfunction
+
+Plug 'itchyny/lightline.vim'
+let g:lightline = {
+            \ 'colorscheme': 'solarized',
+            \ 'active': {
+            \     'left': [ [ 'mode', 'paste' ],
+            \               [ 'filename', 'readonly', 'modified' ] ],
+            \     'right': [ [ 'percent' ],
+            \                [ 'fileformat', 'fileencoding', 'filetype' ],
+            \                [ 'quickfix_error', 'quickfix_warning' ]],
+            \ },
+            \ 'inactive': {
+            \     'left': [ [ 'filename', 'readonly', 'modified' ] ],
+            \     'right': [ [ 'percent' ],
+            \                [ 'fileformat', 'fileencoding', 'filetype' ] ],
+            \ },
+            \ 'component_expand': {
+            \     'quickfix_error': 'QuickfixCountError',
+            \     'quickfix_warning': 'QuickfixCountWarning',
+            \ },
+            \ 'component_type': {
+            \     'quickfix_error': 'error',
+            \     'quickfix_warning': 'warning',
             \ }
-let g:airline#extensions#branch#enabled = 0
-let g:airline#extensions#whitespace#enabled = 0
-" let g:airline#extensions#tagbar#enabled = 1
+            \}
+
+augroup LightlineQuickfixUpdate
+    autocmd!
+    autocmd User LanguageClientDiagnosticsChanged call lightline#update()
+augroup END
+
 set noshowmode
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 Plug 'lifepillar/vim-solarized8'
 " Plug 'altercation/vim-colors-solarized'
@@ -232,6 +265,7 @@ set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
 set hidden
+set shortmess+=c
 " }}}
 
 let g:python_host_prog = '/usr/bin/python2'
