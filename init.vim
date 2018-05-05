@@ -334,18 +334,12 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 
 set signcolumn=yes
 set termguicolors
-let g:airline_theme = 'solarized'
 
 function s:update_colorscheme()
     if $SUNWAIT_STATUS ==? 'DAY'
-        let g:airline_solarized_bg = 'light'
         set background=light
     else
-        let g:airline_solarized_bg = 'dark'
         set background=dark
-    endif
-    if exists(':AirlineRefresh')
-        AirlineRefresh
     endif
     colorscheme solarized8
 endfunction
