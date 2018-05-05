@@ -149,6 +149,7 @@ Plug 'Shougo/neco-syntax', { 'do': ':UpdateRemotePlugins' }
 " I would manually enable it on InsertEnter
 let g:deoplete#enable_at_startup = 0
 
+inoremap <expr> <CR> pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
