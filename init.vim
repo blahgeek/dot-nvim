@@ -261,7 +261,7 @@ set wildignore+=*.so,*.swp,*.zip,*.o,*.pyc
 set foldmethod=marker
 set display=truncate
 set mouse=
-set cursorline
+" set cursorline
 set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
@@ -270,13 +270,16 @@ set shortmess+=c
 set updatetime=100
 " }}}
 
-let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python3'
-
 " FZF {{{
 
 " Load fzf plugin (installed by fzf package)
-source /usr/share/vim/vimfiles/plugin/fzf.vim
+function s:try_source_file(filename)
+    if filereadable(a:filename)
+        execute 'source ' . fnameescape(a:filename)
+    endif
+endfunction
+call s:try_source_file('/usr/share/vim/vimfiles/plugin/fzf.vim')
+call s:try_source_file('/usr/local/opt/fzf/plugin/fzf.vim')
 
 function s:FZFSinkWrapper(cmd, target)
     execute a:cmd fnameescape(a:target[0])
@@ -334,18 +337,8 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 
 set signcolumn=yes
 set termguicolors
-
-function s:update_colorscheme()
-    if $SUNWAIT_STATUS ==? 'DAY'
-        set background=light
-    else
-        set background=dark
-    endif
-    colorscheme solarized8
-endfunction
-
-command! UpdateColorscheme call s:update_colorscheme()
-call s:update_colorscheme()
+set background=light
+colorscheme solarized8
 
 " }}}
 
