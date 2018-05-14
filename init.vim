@@ -357,8 +357,8 @@ set termguicolors
 set background=light
 colorscheme solarized8
 " set ALESign background like LineNr
-hi Error guibg=#eee8d5 ctermbg=254
-hi Todo guibg=#eee8d5 ctermbg=254
+hi ALEErrorSign cterm=bold ctermfg=160 ctermbg=254 gui=bold guifg=#dc322f guibg=#eee8d5
+hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guibg=#eee8d5
 
 " }}}
 
