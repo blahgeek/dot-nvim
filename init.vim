@@ -16,6 +16,7 @@ Plug 'embear/vim-localvimrc'
 let g:rooter_change_directory_for_non_project_files = 'current'
 " '.git' is needed because for git worktree, `.git` is not a directory
 let g:rooter_patterns = ['.git/', '.git', '.lvimrc', '.tags', 'tags', 'pom.xml']
+let g:rooter_silent_chdir = 1
 Plug 'airblade/vim-rooter'
 "}}}
 
