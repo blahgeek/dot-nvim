@@ -282,6 +282,7 @@ set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
 set hidden
+set shortmess+=c
 " }}}
 
 " FZF {{{
