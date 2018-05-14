@@ -1,6 +1,9 @@
 scriptencoding utf-8
 set shell=/bin/bash
 
+let s:use_lsp = 0
+let s:lazy_loads = []
+
 call plug#begin('~/.config/nvim/plugged')
 
 " Project Management {{{
@@ -105,6 +108,7 @@ Plug 'aperezdc/vim-template'
 
 let g:UltiSnipsExpandTrigger = '<S-TAB>'
 Plug 'SirVer/ultisnips', {'on': []}
+let s:lazy_loads = add(s:lazy_loads, 'ultisnips')
 Plug 'honza/vim-snippets'
 
 let g:closetag_filenames = '*.html,*.xml,*.js,*.jsx'
@@ -118,6 +122,7 @@ Plug 'tpope/vim-surround'
 " Plug 'ciaranm/detectindent'
 
 Plug 'lilydjwg/fcitx.vim', {'on': []}
+let s:lazy_loads = add(s:lazy_loads, 'fcitx.vim')
 
 " }}}
 
@@ -142,6 +147,7 @@ Plug 'sbdchd/neoformat'
 " Plug 'majutsushi/tagbar'
 " }}}
 
+if s:use_lsp == 1
 " LSP + Deoplete {{{
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " source from syntax file
@@ -215,6 +221,47 @@ nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 set formatexpr=LanguageClient#textDocument_rangeFormatting()
 
 " }}}
+else
+" ALE Linters {{{
+" Ignore ALE linters for C-family langs, use YCM for them
+let g:ale_linters = {
+            \    'c': [],
+            \    'cpp': [],
+            \    'python': ['flake8'],
+            \    'go': ['go build', 'gofmt']
+            \}
+let g:ale_set_highlights = 0
+let g:ale_sign_column_always = 1
+let g:ale_echo_delay = 200
+let g:ale_echo_msg_format = '[%linter%] %s'
+let g:ale_rust_cargo_use_check = 1
+let g:airline#extensions#ale#enabled = 1
+Plug 'w0rp/ale'
+" }}}
+" YouCompleteMe {{{
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_enable_diagnostic_signs = 1
+let g:ycm_enable_diagnostic_highlighting = 1
+let g:ycm_echo_current_diagnostic = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+" Common C/CXX Flags, initial value same as ale_c_gcc_options
+let g:common_c_flags = ['-std=c11']
+let g:common_cxx_flags = ['-std=c++14']
+let g:ycm_extra_conf_vim_data = ['g:common_c_flags', 'g:common_cxx_flags']
+let g:ycm_global_ycm_extra_conf = '~/.config/nvim/extra/ycm_extra_conf.py'
+
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
+let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
+let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all', 'on': []}
+let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
+
+nnoremap gd :YcmCompleter GoTo<CR>
+nnoremap gx :YcmCompleter FixIt<CR>
+" }}}
+endif
 
 " {{{ Filetypes support
 
@@ -235,11 +282,13 @@ call plug#end()
 
 augroup plug_lazyload_insert
     autocmd!
-    autocmd InsertEnter * call plug#load('ultisnips', 'fcitx.vim')
-                \| call deoplete#enable()
+    autocmd InsertEnter * call call('plug#load', s:lazy_loads)
+                \| if s:use_lsp == 1 | call deoplete#enable() | endif
                 \| autocmd! plug_lazyload_insert
 augroup END
 
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Sensible Configuration {{{
 set clipboard+=unnamedplus
@@ -261,13 +310,12 @@ set wildignore+=*.so,*.swp,*.zip,*.o,*.pyc
 set foldmethod=marker
 set display=truncate
 set mouse=
-" set cursorline
+set cursorline
 set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
 set hidden
 set shortmess+=c
-set updatetime=100
 " }}}
 
 " FZF {{{
@@ -339,6 +387,9 @@ set signcolumn=yes
 set termguicolors
 set background=light
 colorscheme solarized8
+" set ALESign background like LineNr
+hi Error guibg=#eee8d5 ctermbg=254
+hi Todo guibg=#eee8d5 ctermbg=254
 
 " }}}
 
