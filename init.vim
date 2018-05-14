@@ -225,6 +225,8 @@ let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all', 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
 
+let g:airline#extensions#ycm#enabled = 1
+
 nnoremap gd :YcmCompleter GoTo<CR>
 nnoremap gx :YcmCompleter FixIt<CR>
 " }}}
