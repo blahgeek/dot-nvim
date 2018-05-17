@@ -97,6 +97,8 @@ let s:lazy_loads = add(s:lazy_loads, 'fcitx.vim')
 " Tools Integration Plugins {{{
 Plug 'airblade/vim-gitgutter'
 
+Plug 'junegunn/fzf'
+
 let g:ackprg = 'ag --vimgrep'
 let g:ack_mappings = {
             \ '<C-s>': '<C-W><CR><C-W>K',
@@ -289,15 +291,6 @@ set shortmess+=c
 " }}}
 
 " FZF {{{
-
-" Load fzf plugin (installed by fzf package)
-function s:try_source_file(filename)
-    if filereadable(a:filename)
-        execute 'source ' . fnameescape(a:filename)
-    endif
-endfunction
-call s:try_source_file('/usr/share/vim/vimfiles/plugin/fzf.vim')
-call s:try_source_file('/usr/local/opt/fzf/plugin/fzf.vim')
 
 function s:FZFSinkWrapper(cmd, target)
     execute a:cmd fnameescape(a:target[0])
