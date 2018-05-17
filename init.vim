@@ -257,8 +257,8 @@ augroup plug_lazyload_insert
                 \| autocmd! plug_lazyload_insert
 augroup END
 
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog = '/opt/local/bin/python'
+let g:python3_host_prog = '/opt/local/bin/python3'
 
 " Sensible Configuration {{{
 set clipboard+=unnamedplus
