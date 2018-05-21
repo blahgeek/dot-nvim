@@ -89,7 +89,7 @@ Plug 'tpope/vim-surround'
 " let g:detectindent_verbosity = 0
 " Plug 'ciaranm/detectindent'
 
-Plug 'lilydjwg/fcitx.vim', {'on': []}
+Plug 'blahgeek/fcitx.vim', {'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'fcitx.vim')
 
 " }}}
