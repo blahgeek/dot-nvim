@@ -1,4 +1,5 @@
 scriptencoding utf-8
+set shell=/bin/bash
 
 let s:use_lsp = 0
 let s:lazy_loads = []
@@ -355,7 +356,6 @@ hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guib
 " }}}
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
-tnoremap <ESC> <C-\><C-n>
 
 function s:update_header_modified_time()
     " undojoin | normal! ix
