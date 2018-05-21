@@ -1,5 +1,4 @@
 scriptencoding utf-8
-set shell=/bin/bash
 
 let s:use_lsp = 0
 let s:lazy_loads = []
@@ -224,7 +223,7 @@ let g:ycm_global_ycm_extra_conf = '~/.config/nvim/extra/ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
 let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
-let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
+let g:ycm_rust_src_path = '/opt/local/share/rust/src/'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all', 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
 
@@ -357,6 +356,7 @@ hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guib
 " }}}
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
+tnoremap <ESC> <C-\><C-n>
 
 function s:update_header_modified_time()
     " undojoin | normal! ix
