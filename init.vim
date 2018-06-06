@@ -363,6 +363,18 @@ hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guib
 
 " }}}
 
+" Terminal Profile switching {{{
+function s:switch_terminal_profile(name)
+    silent! call writefile(["\033]50;SetProfile=" . a:name . "\007"], '/dev/stdout', 'b')
+endfunction
+
+augroup vimrc_terminal_profile_augroup
+    autocmd!
+    autocmd VimEnter * call s:switch_terminal_profile('DefaultWithLigature')
+    autocmd VimLeave * call s:switch_terminal_profile('Default')
+augroup END
+" }}}
+
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
 function s:update_header_modified_time()
