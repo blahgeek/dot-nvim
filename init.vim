@@ -117,6 +117,11 @@ Plug 'sbdchd/neoformat'
 " Plug 'majutsushi/tagbar'
 " }}}
 
+" Other tools {{{
+Plug 'baverman/vial'
+Plug 'baverman/vial-http'
+" }}}
+
 if s:use_lsp == 1
 " LSP + Deoplete {{{
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -197,6 +202,7 @@ else
 let g:ale_linters = {
             \    'c': [],
             \    'cpp': [],
+            \    'objc': [],
             \    'python': ['flake8'],
             \    'go': ['go build', 'gofmt']
             \}
@@ -220,6 +226,8 @@ let g:common_c_flags = ['-std=c11']
 let g:common_cxx_flags = ['-std=c++14']
 let g:ycm_extra_conf_vim_data = ['g:common_c_flags', 'g:common_cxx_flags']
 let g:ycm_global_ycm_extra_conf = '~/.config/nvim/extra/ycm_extra_conf.py'
+" see help of *youcompleteme-i-cant-complete-python-packages-in-virtual-environment.*
+let g:ycm_python_binary_path = 'python'
 
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
