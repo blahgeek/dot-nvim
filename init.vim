@@ -114,6 +114,9 @@ nnoremap <C-s> :Gstatus<CR>
 
 Plug 'sbdchd/neoformat'
 
+let g:gutentags_project_root = g:rooter_patterns
+Plug 'ludovicchabant/vim-gutentags'
+
 " Plug 'majutsushi/tagbar'
 " }}}
 
