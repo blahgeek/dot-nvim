@@ -303,7 +303,7 @@ set shortmess+=c
 " FZF {{{
 
 function s:FZFSinkWrapper(cmd, target)
-    execute a:cmd fnameescape(a:target[0])
+    execute a:cmd a:target[0]
 endfunction
 
 function s:FZFFiles()
