@@ -235,7 +235,7 @@ let g:ycm_python_binary_path = 'python'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
 let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
-let g:ycm_rust_src_path = '/opt/local/share/rust/src/'
+let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all', 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
 
@@ -270,8 +270,8 @@ augroup plug_lazyload_insert
                 \| autocmd! plug_lazyload_insert
 augroup END
 
-let g:python_host_prog = '/opt/local/bin/python'
-let g:python3_host_prog = '/opt/local/bin/python3'
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Sensible Configuration {{{
 set clipboard+=unnamedplus
