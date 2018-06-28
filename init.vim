@@ -374,8 +374,8 @@ endfunction
 
 augroup vimrc_terminal_profile_augroup
     autocmd!
-    autocmd VimEnter * call s:switch_terminal_profile('DefaultWithLigature')
-    autocmd VimLeave * call s:switch_terminal_profile('Default')
+    autocmd VimEnter,VimResume * call s:switch_terminal_profile('DefaultWithLigature')
+    autocmd VimLeave,VimSuspend * call s:switch_terminal_profile('Default')
 augroup END
 " }}}
 
