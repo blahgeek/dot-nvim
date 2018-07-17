@@ -259,6 +259,8 @@ Plug 'chemzqm/vim-jsx-improve'
 
 Plug 'davidoc/taskpaper.vim'
 
+Plug 'robbles/logstash.vim'
+
 " }}}
 
 " TODO: i3wm & vim panes
