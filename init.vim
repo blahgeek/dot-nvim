@@ -207,7 +207,8 @@ let g:ale_linters = {
             \    'cpp': [],
             \    'objc': [],
             \    'python': ['flake8'],
-            \    'go': ['go build', 'gofmt']
+            \    'go': ['go build', 'gofmt'],
+            \    'java': []
             \}
 let g:ale_set_highlights = 0
 let g:ale_sign_column_always = 1
