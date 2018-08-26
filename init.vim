@@ -1,4 +1,10 @@
 scriptencoding utf-8
+
+if has("gui_vimr")
+    source ~/.config/nvim/init_vimr.vim
+    finish
+end
+
 set shell=/bin/bash
 
 let s:use_lsp = 0
@@ -297,7 +303,7 @@ set wildignore+=*.so,*.swp,*.zip,*.o,*.pyc
 set foldmethod=marker
 set display=truncate
 set mouse=
-set cursorline
+" set cursorline
 set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
@@ -361,7 +367,11 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 " Colorscheme {{{
 
 set signcolumn=yes
-set termguicolors
+if $TERM_PROGRAM =~ "Apple_Terminal"
+    let g:solarized_use16 = 1
+else
+    set termguicolors
+endif
 set background=light
 colorscheme solarized8
 " set ALESign background like LineNr
