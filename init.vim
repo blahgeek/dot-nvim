@@ -212,7 +212,7 @@ let g:ale_linters = {
             \    'c': [],
             \    'cpp': [],
             \    'objc': [],
-            \    'python': ['flake8'],
+            \    'python': ['flake8', 'mypy'],
             \    'go': ['go build', 'gofmt'],
             \    'java': []
             \}
@@ -221,6 +221,8 @@ let g:ale_sign_column_always = 1
 let g:ale_echo_delay = 200
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_rust_cargo_use_check = 1
+let g:ale_python_mypy_ignore_invalid_syntax = 1
+let g:ale_python_mypy_options = '--ignore-missing-imports'
 let g:airline#extensions#ale#enabled = 1
 Plug 'w0rp/ale'
 " }}}
