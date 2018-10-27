@@ -391,6 +391,14 @@ augroup vimrc_terminal_profile_augroup
 augroup END
 " }}}
 
+if has('macunix')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+    let g:python_host_prog = '/usr/local/bin/python2'
+else
+    let g:python3_host_prog = '/usr/bin/python3'
+    let g:python_host_prog = '/usr/bin/python2'
+end
+
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
 function s:update_header_modified_time()
