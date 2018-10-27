@@ -282,9 +282,6 @@ augroup plug_lazyload_insert
                 \| autocmd! plug_lazyload_insert
 augroup END
 
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
-
 " Sensible Configuration {{{
 set clipboard+=unnamedplus
 set smartindent
@@ -393,6 +390,14 @@ augroup vimrc_terminal_profile_augroup
     autocmd VimLeave,VimSuspend * call s:switch_terminal_profile('Default')
 augroup END
 " }}}
+
+if has('macunix')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+    let g:python_host_prog = '/usr/local/bin/python2'
+else
+    let g:python3_host_prog = '/usr/bin/python3'
+    let g:python_host_prog = '/usr/bin/python2'
+end
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
