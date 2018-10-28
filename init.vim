@@ -1,10 +1,5 @@
 scriptencoding utf-8
 
-if has("gui_vimr")
-    source ~/.config/nvim/init_vimr.vim
-    finish
-end
-
 set shell=/bin/bash
 
 let s:use_lsp = 0
