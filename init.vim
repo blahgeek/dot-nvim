@@ -375,14 +375,27 @@ hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guib
 " }}}
 
 " Terminal Profile switching {{{
-function s:switch_terminal_profile(name)
-    silent! call writefile(["\033]50;SetProfile=" . a:name . "\007"], '/dev/stdout', 'b')
+
+function s:switch_terminal_profile_enter()
+    if has('macunix')
+        silent! call writefile(["\033]50;SetProfile=DefaultWithLigature\007"], '/dev/stdout', 'b')
+    else
+        silent! call writefile(["\033]50;Font=Fira Code\007"], '/dev/stdout', 'b')
+    end
+endfunction
+
+function s:switch_terminal_profile_leave()
+    if has('macunix')
+        silent! call writefile(["\033]50;SetProfile=Default\007"], '/dev/stdout', 'b')
+    else
+        silent! call writefile(["\033]50;Font=Fira Mono\007"], '/dev/stdout', 'b')
+    end
 endfunction
 
 augroup vimrc_terminal_profile_augroup
     autocmd!
-    autocmd VimEnter,VimResume * call s:switch_terminal_profile('DefaultWithLigature')
-    autocmd VimLeave,VimSuspend * call s:switch_terminal_profile('Default')
+    autocmd VimEnter,VimResume * call s:switch_terminal_profile_enter()
+    autocmd VimLeave,VimSuspend * call s:switch_terminal_profile_leave()
 augroup END
 " }}}
 
