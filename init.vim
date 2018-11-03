@@ -260,6 +260,7 @@ Plug 'sheerun/vim-polyglot'
 let g:jsx_improve_motion_disable = 1
 Plug 'chemzqm/vim-jsx-improve'
 
+let g:task_paper_date_format = "%Y-%m-%dT%H:%M"
 Plug 'davidoc/taskpaper.vim'
 
 Plug 'robbles/logstash.vim'
