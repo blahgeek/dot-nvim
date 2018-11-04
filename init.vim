@@ -239,7 +239,7 @@ let g:ycm_python_binary_path = 'python'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
 let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
-let g:ycm_rust_src_path = '/usr/src/rust/src/'
+let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --rust-completer --js-completer --java-completer',
             \ 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
