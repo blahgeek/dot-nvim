@@ -115,15 +115,16 @@ nnoremap <C-s> :Gstatus<CR>
 
 Plug 'sbdchd/neoformat'
 
-let g:gutentags_project_root = g:rooter_patterns
-Plug 'ludovicchabant/vim-gutentags'
+" let g:gutentags_project_root = g:rooter_patterns
+" Plug 'ludovicchabant/vim-gutentags'
 
 " Plug 'majutsushi/tagbar'
 " }}}
 
 " Other tools {{{
-Plug 'baverman/vial'
-Plug 'baverman/vial-http'
+" vial startup is slow. TODO: load vial on demand for vial-http. DEP: https://github.com/baverman/vial/issues/5
+" Plug 'baverman/vial'
+" Plug 'baverman/vial-http'
 " }}}
 
 if s:use_lsp == 1
@@ -159,6 +160,12 @@ let g:LanguageClient_serverCommands = {
     \ 'go': ['go-langserver', '-gocodecompletion'],
     \ }
 " \ 'java': ['jdtls', '-Dlog.level=ALL', '-Djdt.ls.debug=1'],
+
+" let g:LanguageClient_devel = 1
+let g:LanguageClient_loggingLevel = 'DEBUG'
+let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
+let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
+
 " TODO: highlights from gitgutter are used here
 let g:LanguageClient_diagnosticsDisplay =
             \    {
@@ -240,7 +247,7 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
 let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
 let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --rust-completer --js-completer --java-completer',
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --rust-completer',
             \ 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
 
@@ -372,6 +379,8 @@ colorscheme solarized8
 " set ALESign background like LineNr
 hi ALEErrorSign cterm=bold ctermfg=160 ctermbg=254 gui=bold guifg=#dc322f guibg=#eee8d5
 hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guibg=#eee8d5
+hi link YcmErrorSign ALEErrorSign
+hi link YcmWarningSign ALEWarningSign
 
 " }}}
 
@@ -400,9 +409,21 @@ augroup vimrc_terminal_profile_augroup
 augroup END
 " }}}
 
-if has('macunix')
+if has('mac')
     let g:python3_host_prog = '/usr/local/bin/python3'
     let g:python_host_prog = '/usr/local/bin/python2'
+    " setting g:clipboard would make loading clipboard.vim faster
+    let g:clipboard = {
+                \   'name': 'pbcopy',
+                \   'copy': {
+                \      '+': 'pbcopy',
+                \      '*': 'pbcopy',
+                \    },
+                \    'paste': {
+                \      '+': 'pbpaste',
+                \      '*': 'pbpaste',
+                \    },
+                \ }
 else
     let g:python3_host_prog = '/usr/bin/python3'
     let g:python_host_prog = '/usr/bin/python2'
