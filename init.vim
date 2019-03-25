@@ -243,6 +243,10 @@ let g:ycm_global_ycm_extra_conf = '~/.config/nvim/extra/ycm_extra_conf.py'
 " see help of *youcompleteme-i-cant-complete-python-packages-in-virtual-environment.*
 let g:ycm_python_binary_path = 'python'
 
+" do not enable java semantic completion (ultra slow)
+let g:ycm_filetype_specific_completion_to_disable = {
+            \ 'java': 1
+            \ }
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
 let g:ycm_key_list_previous_completion = ['<Up>', '<C-k>']
@@ -319,7 +323,7 @@ function s:FZFSinkWrapper(cmd, target)
 endfunction
 
 function s:FZFFiles()
-    let l:source = 'git ls-files -oc --exclude-standard'
+    let l:source = 'git ls-files -c --exclude-standard --recurse-submodules; git ls-files -o --exclude-standard'
     " fallback to ag if not a git repo
     if fugitive#head() ==# ''
         let l:source = 'ag -g ""'
