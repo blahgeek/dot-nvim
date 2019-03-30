@@ -2,7 +2,7 @@ scriptencoding utf-8
 
 set shell=/bin/bash
 
-let s:use_lsp = 0
+let s:use_lsp = 1
 let s:lazy_loads = []
 
 call plug#begin('~/.config/nvim/plugged')
@@ -75,10 +75,15 @@ let g:templates_directory = '~/.config/nvim/templates/'
 let g:templates_no_builtin_templates = 1
 Plug 'aperezdc/vim-template'
 
-let g:UltiSnipsExpandTrigger = '<S-TAB>'
-Plug 'SirVer/ultisnips', {'on': []}
-let s:lazy_loads = add(s:lazy_loads, 'ultisnips')
-Plug 'honza/vim-snippets'
+" let g:UltiSnipsExpandTrigger = '<S-TAB>'
+" Plug 'SirVer/ultisnips', {'on': []}
+" let s:lazy_loads = add(s:lazy_loads, 'ultisnips')
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+imap <C-l>     <Plug>(neosnippet_expand_or_jump)
+smap <C-l>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-l>     <Plug>(neosnippet_expand_target)
+" Plug 'honza/vim-snippets'
 
 let g:closetag_filenames = '*.html,*.xml,*.js,*.jsx'
 Plug 'alvan/vim-closetag'
@@ -156,47 +161,22 @@ let g:LanguageClient_serverCommands = {
     \ 'c': ['cquery'],
     \ 'python': ['pyls'],
     \ 'rust': ['rls'],
-    \ 'java': [expand('<sfile>:p:h') . '/lsp/jdtls.wrapper.sh'],
     \ 'go': ['go-langserver', '-gocodecompletion'],
+    \ 'clojure': ['clojure-lsp'],
     \ }
-" \ 'java': ['jdtls', '-Dlog.level=ALL', '-Djdt.ls.debug=1'],
+    " \ 'java': ['jdtls.wrapper.sh'],
+" \ 'java': [expand('<sfile>:p:h') . '/lsp/jdtls.wrapper.sh'],
 
 " let g:LanguageClient_devel = 1
-let g:LanguageClient_loggingLevel = 'DEBUG'
+let g:LanguageClient_loggingLevel = 'INFO'
 let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
 let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
 
-" TODO: highlights from gitgutter are used here
-let g:LanguageClient_diagnosticsDisplay =
-            \    {
-            \        1: {
-            \            "name": "Error",
-            \            "texthl": "Error",
-            \            "signText": "--",
-            \            "signTexthl": "GitGutterDelete",
-            \        },
-            \        2: {
-            \            "name": "Warning",
-            \            "texthl": "Ignore",
-            \            "signText": "--",
-            \            "signTexthl": "GitGutterChange",
-            \        },
-            \        3: {
-            \            "name": "Information",
-            \            "texthl": "Ignore",
-            \            "signText": "--",
-            \            "signTexthl": "SignColumn",
-            \        },
-            \        4: {
-            \            "name": "Hint",
-            \            "texthl": "Ignore",
-            \            "signText": "--",
-            \            "signTexthl": "SignColumn",
-            \        },
-            \    }
 let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/lsp/settings.json'
 let g:LanguageClient_fzfOptions = ''
+
+let g:airline#extensions#languageclient#enabled = 1
 
 nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
