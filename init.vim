@@ -109,7 +109,7 @@ let g:ackprg = 'ag --vimgrep'
 let g:ack_mappings = {
             \ '<C-s>': '<C-W><CR><C-W>K',
             \ '<C-v>': '<C-W><CR><C-W>H<C-W>b<C-W>J<C-W>t' }
-cnoreabbrev ag Ack!
+cnoreabbrev ag LAck!
 Plug 'mileszs/ack.vim'
 
 Plug 'tpope/vim-fugitive'
@@ -157,13 +157,16 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'cpp': ['cquery'],
-    \ 'c': ['cquery'],
+    \ 'cpp': ['/usr/local/opt/llvm/bin/clangd'],
+    \ 'c': ['/usr/local/opt/llvm/bin/clangd'],
     \ 'python': ['pyls'],
     \ 'rust': ['rls'],
     \ 'go': ['go-langserver', '-gocodecompletion'],
     \ 'clojure': ['clojure-lsp'],
+    \ 'java': ['/Users/blahgeek/Code/java-language-server/dist/mac/bin/launcher'],
     \ }
+    " \ 'cpp': ['cquery'],
+    " \ 'c': ['cquery'],
     " \ 'java': ['jdtls.wrapper.sh'],
 " \ 'java': [expand('<sfile>:p:h') . '/lsp/jdtls.wrapper.sh'],
 
@@ -175,6 +178,7 @@ let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
 let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/lsp/settings.json'
 let g:LanguageClient_fzfOptions = ''
+let g:LanguageClient_hasSnippetSupport = 0
 
 let g:airline#extensions#languageclient#enabled = 1
 
