@@ -2,7 +2,9 @@ scriptencoding utf-8
 
 set shell=/bin/bash
 
-let s:use_lsp = 1
+let s:use_lsp = 0
+let s:use_ycm = 0
+let s:use_coc = 1
 let s:lazy_loads = []
 
 call plug#begin('~/.config/nvim/plugged')
@@ -26,6 +28,8 @@ Plug 'airblade/vim-rooter'
 " See ColorScheme section
 " let g:airline_powerline_fonts = 1
 let g:airline_symbols_ascii = 1
+let g:airline#extensions#disable_rtp_load = 1
+let g:airline_extensions = []
 let g:airline#extensions#default#layout = [
             \ [ 'a', 'b', 'c' ],
             \ [ 'x', 'y', 'error', 'warning' ]
@@ -180,6 +184,7 @@ let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/lsp/settings.json'
 let g:LanguageClient_fzfOptions = ''
 let g:LanguageClient_hasSnippetSupport = 0
 
+call add(g:airline_extensions, 'languageclient')
 let g:airline#extensions#languageclient#enabled = 1
 
 nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
@@ -191,7 +196,9 @@ nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 set formatexpr=LanguageClient#textDocument_rangeFormatting()
 
 " }}}
-else
+endif
+
+if s:use_ycm == 1
 " ALE Linters {{{
 " Ignore ALE linters for C-family langs, use YCM for them
 let g:ale_linters = {
@@ -209,6 +216,8 @@ let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_rust_cargo_use_check = 1
 let g:ale_python_mypy_ignore_invalid_syntax = 1
 let g:ale_python_mypy_options = '--ignore-missing-imports'
+
+call add(g:airline_extensions, 'ale')
 let g:airline#extensions#ale#enabled = 1
 Plug 'w0rp/ale'
 " }}}
@@ -239,10 +248,42 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-comp
             \ 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
 
+call add(g:airline_extensions, 'ycm')
 let g:airline#extensions#ycm#enabled = 1
 
 nnoremap gd :YcmCompleter GoTo<CR>
 nnoremap gx :YcmCompleter FixIt<CR>
+" }}}
+endif
+
+if s:use_coc == 1
+" {{{ coc
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+
+inoremap <expr> <CR> pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+inoremap <silent><expr> <S-TAB> coc#refresh()
+
+nmap gd <Plug>(coc-definition)
+nmap gy <Plug>(coc-type-definition)
+nmap gi <Plug>(coc-implementation)
+nmap gr <Plug>(coc-references)
+nmap gh :call CocAction('doHover')<CR>
+nmap g? :call CocAction('diagnosticInfo')<CR>
+nmap <F2> <Plug>(coc-rename)
+nmap <C-n>  <Plug>(coc-codeaction)
+nmap gx  <Plug>(coc-fix-current)
+setl formatexpr=CocAction('formatSelected')
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+command! -nargs=0 Format :call CocAction('format')
+
+call add(g:airline_extensions, 'coc')
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 " }}}
 endif
 
@@ -273,6 +314,28 @@ augroup plug_lazyload_insert
                 \| autocmd! plug_lazyload_insert
 augroup END
 
+" {{{ Set g:clipboard and g:python*
+if has('mac')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+    let g:python_host_prog = '/usr/local/bin/python2'
+    " setting g:clipboard would make loading clipboard.vim faster
+    let g:clipboard = {
+                \   'name': 'pbcopy',
+                \   'copy': {
+                \      '+': 'pbcopy',
+                \      '*': 'pbcopy',
+                \    },
+                \    'paste': {
+                \      '+': 'pbpaste',
+                \      '*': 'pbpaste',
+                \    },
+                \ }
+else
+    let g:python3_host_prog = '/usr/bin/python3'
+    let g:python_host_prog = '/usr/bin/python2'
+end
+" }}}
+
 " Sensible Configuration {{{
 set clipboard+=unnamedplus
 set smartindent
@@ -298,6 +361,11 @@ set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
 set shortmess+=c
+set hidden
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=yes
 " }}}
 
 " FZF {{{
@@ -356,7 +424,6 @@ nnoremap <silent> <C-g> :FZFTagsCurrentFile<CR>
 
 " Colorscheme {{{
 
-set signcolumn=yes
 if $TERM_PROGRAM =~ "Apple_Terminal"
     let g:solarized_use16 = 1
 else
@@ -369,6 +436,8 @@ hi ALEErrorSign cterm=bold ctermfg=160 ctermbg=254 gui=bold guifg=#dc322f guibg=
 hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guibg=#eee8d5
 hi link YcmErrorSign ALEErrorSign
 hi link YcmWarningSign ALEWarningSign
+hi link CocErrorSign ALEErrorSign
+hi link CocWarningSign ALEWarningSign
 
 " }}}
 
@@ -396,26 +465,6 @@ augroup vimrc_terminal_profile_augroup
     autocmd VimLeave,VimSuspend * call s:switch_terminal_profile_leave()
 augroup END
 " }}}
-
-if has('mac')
-    let g:python3_host_prog = '/usr/local/bin/python3'
-    let g:python_host_prog = '/usr/local/bin/python2'
-    " setting g:clipboard would make loading clipboard.vim faster
-    let g:clipboard = {
-                \   'name': 'pbcopy',
-                \   'copy': {
-                \      '+': 'pbcopy',
-                \      '*': 'pbcopy',
-                \    },
-                \    'paste': {
-                \      '+': 'pbpaste',
-                \      '*': 'pbpaste',
-                \    },
-                \ }
-else
-    let g:python3_host_prog = '/usr/bin/python3'
-    let g:python_host_prog = '/usr/bin/python2'
-end
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
 

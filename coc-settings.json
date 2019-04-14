@@ -1,0 +1,30 @@
+{
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextPrefix": "‣ ",
+    "diagnostic.enableMessage": "never",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "languageserver": {
+        "clangd": {
+            "command": "/usr/local/opt/llvm/bin/clangd",
+            "filetypes": [
+                "c",
+                "cpp"
+            ]
+        },
+        "javac": {
+            "command": "/Users/blahgeek/Code/java-language-server/dist/mac/bin/launcher",
+            "filetypes": [
+                "java"
+            ]
+        },
+        "clojure": {
+            "command": "clojure-lsp",
+            "filetypes": [
+                "clojure",
+                "clj"
+            ]
+        }
+    }
+}
