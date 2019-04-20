@@ -31,9 +31,23 @@ let g:airline_symbols_ascii = 1
 let g:airline#extensions#disable_rtp_load = 1
 let g:airline_extensions = []
 let g:airline#extensions#default#layout = [
-            \ [ 'a', 'b', 'c' ],
+            \ [ 'a', 'b', 'c'],
             \ [ 'x', 'y', 'error', 'warning' ]
             \ ]
+
+" Override these function to provide info
+function _GetCurrentFunction()
+    return ''
+endfunction
+function _GetLspStatus()
+    return ''
+endfunction
+" copied from original g:airline_section_c
+" let's use section C for function info, use section B for filename
+let g:airline_section_b = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+let g:airline_section_c = '%<%{airline#util#wrap(_GetCurrentFunction(), 0)}%#__restore__#'
+let g:airline_section_x = '%{airline#util#prepend(_GetLspStatus(), 0)}%{airline#util#wrap(airline#parts#filetype(),0)}'
+
 let g:airline#extensions#default#section_truncate_width = {
             \ 'b': 79,
             \ 'x': 60,
@@ -271,19 +285,35 @@ nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
 nmap gh :call CocAction('doHover')<CR>
-nmap g? :call CocAction('diagnosticInfo')<CR>
+nmap g? <Plug>(coc-diagnostic-info)
 nmap <F2> <Plug>(coc-rename)
 nmap <C-n>  <Plug>(coc-codeaction)
 nmap gx  <Plug>(coc-fix-current)
 setl formatexpr=CocAction('formatSelected')
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('doHover')
 
 command! -nargs=0 Format :call CocAction('format')
 
 call add(g:airline_extensions, 'coc')
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
+function! _GetCurrentFunction()
+    if !exists('b:coc_current_function')
+        return ''
+    endif
+    return b:coc_current_function
+endfunction
+
+function! _GetLspStatus()
+    if !exists('g:coc_status')
+        return ''
+    endif
+    return g:coc_status
+endfunction
+
 " }}}
 endif
 
@@ -434,10 +464,14 @@ colorscheme solarized8
 " set ALESign background like LineNr
 hi ALEErrorSign cterm=bold ctermfg=160 ctermbg=254 gui=bold guifg=#dc322f guibg=#eee8d5
 hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guibg=#eee8d5
+hi ALEInfoSign ctermfg=Yellow guifg=#fab005 ctermbg=254 guibg=#eee8d5
+hi ALEHintSign ctermfg=Blue guifg=#15aabf ctermbg=254 guibg=#eee8d5
 hi link YcmErrorSign ALEErrorSign
 hi link YcmWarningSign ALEWarningSign
 hi link CocErrorSign ALEErrorSign
 hi link CocWarningSign ALEWarningSign
+hi link CocInfoSign ALEInfoSign
+hi link CocHintSign ALEHintSign
 
 " }}}
 

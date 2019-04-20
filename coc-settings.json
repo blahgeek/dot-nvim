@@ -1,7 +1,12 @@
 {
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextPrefix": "‣ ",
-    "diagnostic.enableMessage": "never",
+    "diagnostic.enableMessage": "jump",
+    "diagnostic.errorSign": "✖",
+    "diagnostic.warningSign": "⚠",
+    "diagnostic.infoSign": "ℹ",
+    "diagnostic.hintSign": "➤",
+    "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
