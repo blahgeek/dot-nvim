@@ -468,7 +468,7 @@ hi link CocHintSign ALEHintSign
 " Terminal Profile switching {{{
 
 function s:switch_terminal_profile_enter()
-    if has('macunix')
+    if $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=DefaultWithLigature\007"], '/dev/stdout', 'b')
     else
         silent! call writefile(["\033]50;Font=Fira Code\007"], '/dev/stdout', 'b')
@@ -476,7 +476,7 @@ function s:switch_terminal_profile_enter()
 endfunction
 
 function s:switch_terminal_profile_leave()
-    if has('macunix')
+    if $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=Default\007"], '/dev/stdout', 'b')
     else
         silent! call writefile(["\033]50;Font=Fira Mono\007"], '/dev/stdout', 'b')
