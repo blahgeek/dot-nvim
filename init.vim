@@ -93,17 +93,7 @@ let g:templates_directory = '~/.config/nvim/templates/'
 let g:templates_no_builtin_templates = 1
 Plug 'aperezdc/vim-template'
 
-" let g:UltiSnipsExpandTrigger = '<S-TAB>'
-" Plug 'SirVer/ultisnips', {'on': []}
-" let s:lazy_loads = add(s:lazy_loads, 'ultisnips')
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-imap <C-l>     <Plug>(neosnippet_expand_or_jump)
-smap <C-l>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-l>     <Plug>(neosnippet_expand_target)
-" Plug 'honza/vim-snippets'
-
-let g:closetag_filenames = '*.html,*.xml,*.js,*.jsx'
+let g:closetag_filenames = '*.html,*.xml,*.jsx'
 Plug 'alvan/vim-closetag'
 
 Plug 'tpope/vim-surround'
