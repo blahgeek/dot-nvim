@@ -31,7 +31,7 @@ let g:airline_symbols_ascii = 1
 let g:airline#extensions#disable_rtp_load = 1
 let g:airline_extensions = []
 let g:airline#extensions#default#layout = [
-            \ [ 'a', 'b', 'c'],
+            \ [ 'a', 'filesection', 'funcsection'],
             \ [ 'x', 'y', 'error', 'warning' ]
             \ ]
 
@@ -42,11 +42,23 @@ endfunction
 function _GetLspStatus()
     return ''
 endfunction
-" copied from original g:airline_section_c
-" let's use section C for function info, use section B for filename
-let g:airline_section_b = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
-let g:airline_section_c = '%<%{airline#util#wrap(_GetCurrentFunction(), 0)}%#__restore__#'
-let g:airline_section_x = '%{airline#util#prepend(_GetLspStatus(), 0)}%{airline#util#wrap(airline#parts#filetype(),0)}'
+
+function! _AirlineInit()
+    call airline#parts#define_function('current_function', '_GetCurrentFunction')
+    let g:airline_section_filesection = airline#section#create(['%<', 'file', ' ', 'readonly'])
+    let g:airline_section_funcsection = airline#section#create(['%<', 'current_function'])
+
+    call airline#parts#define_function('lsp_status', '_GetLspStatus')
+    let g:airline_section_x = airline#section#create_right(['lsp_status', 'filetype'])
+
+    hi! link airline_filesection airline_b
+    hi! link airline_funcsection airline_c
+    hi! link airline_filesection_red airline_b_red
+endfunction
+
+augroup vimrc_airline_init
+    au User AirlineAfterInit call _AirlineInit()
+augroup END
 
 let g:airline#extensions#default#section_truncate_width = {
             \ 'b': 79,
