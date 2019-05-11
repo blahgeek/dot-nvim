@@ -25,7 +25,7 @@
             ]
         },
         "clojure": {
-            "command": "clojure-lsp",
+            "command": "/Users/blahgeek/.local/bin/clojure-lsp",
             "filetypes": [
                 "clojure",
                 "clj"

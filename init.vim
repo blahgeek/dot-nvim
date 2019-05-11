@@ -150,6 +150,7 @@ Plug 'sbdchd/neoformat'
 " vial startup is slow. TODO: load vial on demand for vial-http. DEP: https://github.com/baverman/vial/issues/5
 " Plug 'baverman/vial'
 " Plug 'baverman/vial-http'
+Plug 'vimoutliner/vimoutliner'
 " }}}
 
 if s:use_lsp == 1
@@ -388,7 +389,7 @@ set wildignore+=*.so,*.swp,*.zip,*.o,*.pyc
 set foldmethod=marker
 set display=truncate
 set mouse=
-" set cursorline
+set cursorline
 set inccommand=nosplit
 " set cinoptions=N-s,j1,(0,ws,Ws
 set cinoptions+=g0,j1,(0,ws,W2s,ks,m1
