@@ -500,7 +500,7 @@ hi link CocHintSign ALEHintSign
 
 function s:switch_terminal_profile_enter()
     if !empty($KITTY_LISTEN_ON)
-        silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " cursor")
+        silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " cursor &")
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=DefaultWithLigature\007"], '/dev/stdout', 'b')
     else
@@ -510,7 +510,7 @@ endfunction
 
 function s:switch_terminal_profile_leave()
     if !empty($KITTY_LISTEN_ON)
-        silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " always")
+        silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " always &")
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=Default\007"], '/dev/stdout', 'b')
     else
