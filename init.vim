@@ -2,9 +2,9 @@ scriptencoding utf-8
 
 set shell=/bin/bash
 
-let s:use_lsp = 0
+let s:use_lsp = 1
 let s:use_ycm = 0
-let s:use_coc = 1
+let s:use_coc = 0
 let s:lazy_loads = []
 
 call plug#begin('~/.config/nvim/plugged')
@@ -200,6 +200,7 @@ let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if yo
 let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/lsp/settings.json'
 let g:LanguageClient_fzfOptions = ''
 let g:LanguageClient_hasSnippetSupport = 0
+let g:LanguageClient_hoverPreview = 'Always'
 
 call add(g:airline_extensions, 'languageclient')
 let g:airline#extensions#languageclient#enabled = 1
@@ -211,6 +212,20 @@ nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
 nnoremap <silent> gx :call LanguageClient_textDocument_codeAction()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 set formatexpr=LanguageClient#textDocument_rangeFormatting()
+
+augroup LanguageClient_currentFunction_augroup
+    au!
+    au CursorHold * silent! call LanguageClient_textDocument_documentSymbol(
+                \ {'handle': v:false},
+                \ '_LanguageClient_CurrentFunction_callback')
+augroup END
+
+function! _GetCurrentFunction()
+    if !exists('b:languageclient_current_function')
+        return ''
+    endif
+    return b:languageclient_current_function
+endfunction
 
 " }}}
 endif
@@ -401,6 +416,7 @@ set nobackup
 set nowritebackup
 set updatetime=300
 set signcolumn=yes
+set lazyredraw
 " }}}
 
 " FZF {{{
@@ -510,6 +526,7 @@ augroup END
 " }}}
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap Q @@
 
 function s:update_header_modified_time()
     " undojoin | normal! ix
@@ -530,6 +547,6 @@ augroup vimrc_augroup
     autocmd BufWritePre * silent! call s:update_header_modified_time()
     " React to window resize
     autocmd VimResized * wincmd =
-    autocmd VimResized * redraw!
+    " autocmd VimResized * redraw!
     autocmd BufWritePre *.go :Neoformat
 augroup END

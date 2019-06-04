@@ -1,5 +1,16 @@
 {
     "initializationOptions": {
         "cacheDirectory": ".lsp-cache"
+    },
+    "pyls": {
+        "configurationSources": ["flake8"],
+        "plugins": {
+            "mccabe": {
+                "enabled": false
+            },
+            "pyls_mypy": {
+                "live_mode": false
+            }
+        }
     }
 }
