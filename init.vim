@@ -178,8 +178,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'cpp': ['/usr/local/opt/llvm/bin/clangd'],
-    \ 'c': ['/usr/local/opt/llvm/bin/clangd'],
+    \ 'cpp': ['clangd'],
+    \ 'c': ['clangd'],
     \ 'python': ['pyls'],
     \ 'rust': ['rls'],
     \ 'go': ['go-langserver', '-gocodecompletion'],
@@ -504,7 +504,7 @@ function s:switch_terminal_profile_enter()
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=DefaultWithLigature\007"], '/dev/stdout', 'b')
     else
-        silent! call writefile(["\033]50;Font=Fira Code\007"], '/dev/stdout', 'b')
+        silent! call writefile(["\033]50;Font=Fira Code,10\007"], '/dev/stdout', 'b')
     end
 endfunction
 
@@ -514,7 +514,7 @@ function s:switch_terminal_profile_leave()
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=Default\007"], '/dev/stdout', 'b')
     else
-        silent! call writefile(["\033]50;Font=Fira Mono\007"], '/dev/stdout', 'b')
+        silent! call writefile(["\033]50;Font=Fira Mono,10\007"], '/dev/stdout', 'b')
     end
 endfunction
 
