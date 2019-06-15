@@ -2,7 +2,9 @@ scriptencoding utf-8
 
 set shell=/bin/bash
 
-let s:use_lsp = 1
+let s:use_lsp = 0
+let s:use_deoplete = 1
+let s:use_ale = 1
 let s:use_ycm = 0
 let s:use_coc = 0
 let s:lazy_loads = []
@@ -153,8 +155,8 @@ Plug 'sbdchd/neoformat'
 Plug 'vimoutliner/vimoutliner'
 " }}}
 
-if s:use_lsp == 1
-" LSP + Deoplete {{{
+if s:use_deoplete == 1
+" Deoplete {{{
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " source from syntax file
 Plug 'Shougo/neco-syntax', { 'do': ':UpdateRemotePlugins' }
@@ -166,13 +168,22 @@ inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
+function s:_deoplete_set_custom_opts()
+    call deoplete#custom#source('ale', 'rank', 1000)
+    call deoplete#custom#source('ale', 'min_pattern_length', 0)
+endfunction
+
 " close preview window after insertion
 augroup auto_close_preview_window
     autocmd!
     autocmd InsertLeave * if pumvisible() == 0|pclose|endif
     " autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 augroup END
+" }}}
+endif
 
+if s:use_lsp == 1
+" LSP {{{
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -230,29 +241,49 @@ endfunction
 " }}}
 endif
 
-if s:use_ycm == 1
+if s:use_ale == 1
 " ALE Linters {{{
-" Ignore ALE linters for C-family langs, use YCM for them
 let g:ale_linters = {
-            \    'c': [],
-            \    'cpp': [],
-            \    'objc': [],
-            \    'python': ['flake8', 'mypy'],
+            \    'c': ['clangd'],
+            \    'cpp': ['clangd'],
+            \    'objc': ['clangd'],
+            \    'rust': ['rls'],
+            \    'python': ['flake8', 'mypy', 'pyls'],
             \    'go': ['go build', 'gofmt'],
-            \    'java': []
+            \    'java': ['javalsp'],
             \}
-let g:ale_set_highlights = 0
+let g:ale_virtualtext_cursor = 0
+let g:ale_set_highlights = 1
 let g:ale_sign_column_always = 1
 let g:ale_echo_delay = 200
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_rust_cargo_use_check = 1
 let g:ale_python_mypy_ignore_invalid_syntax = 1
 let g:ale_python_mypy_options = '--ignore-missing-imports'
+let g:ale_python_pyls_config = {
+            \ 'pyls': {
+            \   'plugins': {
+            \       'flake8': { 'enabled': v:false },
+            \       'pycodestyle': { 'enabled': v:false },
+            \       'pyls_mypy': { 'enabled': v:false },
+            \   }
+            \ }
+            \}
 
 call add(g:airline_extensions, 'ale')
 let g:airline#extensions#ale#enabled = 1
+
 Plug 'w0rp/ale'
+
+nnoremap <silent> gh :ALEHover<CR>
+nnoremap <silent> gd :ALEGoToDefinition<CR>
+nnoremap <silent> gD :ALEGoToDefinitionInSplit<CR>
+nnoremap <silent> gr :ALEFindReferences<CR>
+nnoremap <silent> gx :ALEFix<CR>
 " }}}
+endif
+
+if s:use_ycm == 1
 " YouCompleteMe {{{
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_enable_diagnostic_signs = 1
@@ -358,7 +389,7 @@ call plug#end()
 augroup plug_lazyload_insert
     autocmd!
     autocmd InsertEnter * call call('plug#load', s:lazy_loads)
-                \| if s:use_lsp == 1 | call deoplete#enable() | endif
+                \| if s:use_deoplete == 1 | call deoplete#enable() | call s:_deoplete_set_custom_opts() | endif
                 \| autocmd! plug_lazyload_insert
 augroup END
 
@@ -487,6 +518,11 @@ hi ALEErrorSign cterm=bold ctermfg=160 ctermbg=254 gui=bold guifg=#dc322f guibg=
 hi ALEWarningSign cterm=bold ctermfg=162 ctermbg=254 gui=bold guifg=#d33682 guibg=#eee8d5
 hi ALEInfoSign ctermfg=Yellow guifg=#fab005 ctermbg=254 guibg=#eee8d5
 hi ALEHintSign ctermfg=Blue guifg=#15aabf ctermbg=254 guibg=#eee8d5
+hi link ALEVirtualTextError ALEErrorSign
+hi link ALEVirtualTextWarning ALEWarningSign
+hi link ALEVirtualTextInfo ALEInfoSign
+hi link ALEVirtualTextStyleError ALEWarningSign
+hi link ALEVirtualTextStyleWarning ALEInfoSign
 hi link YcmErrorSign ALEErrorSign
 hi link YcmWarningSign ALEWarningSign
 hi link CocErrorSign ALEErrorSign
