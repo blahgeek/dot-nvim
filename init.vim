@@ -170,7 +170,7 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
 function s:_deoplete_set_custom_opts()
     call deoplete#custom#source('ale', 'rank', 1000)
-    call deoplete#custom#source('ale', 'min_pattern_length', 0)
+    " call deoplete#custom#source('ale', 'min_pattern_length', 0)
 endfunction
 
 " close preview window after insertion
@@ -253,7 +253,7 @@ let g:ale_linters = {
             \    'java': ['javalsp'],
             \}
 let g:ale_virtualtext_cursor = 0
-let g:ale_set_highlights = 1
+let g:ale_set_highlights = 0
 let g:ale_sign_column_always = 1
 let g:ale_echo_delay = 200
 let g:ale_echo_msg_format = '[%linter%] %s'
@@ -269,6 +269,7 @@ let g:ale_python_pyls_config = {
             \   }
             \ }
             \}
+let g:ale_java_javalsp_executable = '/Users/blahgeek/Code/java-language-server/dist/mac/bin/launcher'
 
 call add(g:airline_extensions, 'ale')
 let g:airline#extensions#ale#enabled = 1
