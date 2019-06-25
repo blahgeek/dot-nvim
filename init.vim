@@ -131,7 +131,7 @@ let g:ackprg = 'ag --vimgrep'
 let g:ack_mappings = {
             \ '<C-s>': '<C-W><CR><C-W>K',
             \ '<C-v>': '<C-W><CR><C-W>H<C-W>b<C-W>J<C-W>t' }
-cnoreabbrev ag LAck!
+cnoreabbrev ag Ack!
 Plug 'mileszs/ack.vim'
 
 Plug 'tpope/vim-fugitive'
