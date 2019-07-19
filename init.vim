@@ -168,11 +168,6 @@ inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
-function s:_deoplete_set_custom_opts()
-    call deoplete#custom#source('ale', 'rank', 1000)
-    " call deoplete#custom#source('ale', 'min_pattern_length', 0)
-endfunction
-
 " close preview window after insertion
 augroup auto_close_preview_window
     autocmd!
@@ -390,7 +385,7 @@ call plug#end()
 augroup plug_lazyload_insert
     autocmd!
     autocmd InsertEnter * call call('plug#load', s:lazy_loads)
-                \| if s:use_deoplete == 1 | call deoplete#enable() | call s:_deoplete_set_custom_opts() | endif
+                \| if s:use_deoplete == 1 | call deoplete#enable() | endif
                 \| autocmd! plug_lazyload_insert
 augroup END
 
