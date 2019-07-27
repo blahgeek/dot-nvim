@@ -531,7 +531,9 @@ hi link CocHintSign ALEHintSign
 " Terminal Profile switching {{{
 
 function s:switch_terminal_profile_enter()
-    if !empty($KITTY_LISTEN_ON)
+    if !empty($BQTERM_LOCAL_CONTROL_PORT)
+        silent! call system("echo -n \"Font=Fira Code\" | socat STDIN UDP:127.0.0.1:" . $BQTERM_LOCAL_CONTROL_PORT . " &")
+    elseif !empty($KITTY_LISTEN_ON)
         silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " cursor &")
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=DefaultWithLigature\007"], '/dev/stdout', 'b')
@@ -541,7 +543,9 @@ function s:switch_terminal_profile_enter()
 endfunction
 
 function s:switch_terminal_profile_leave()
-    if !empty($KITTY_LISTEN_ON)
+    if !empty($BQTERM_LOCAL_CONTROL_PORT)
+        silent! call system("echo -n \"Font=Fira Mono\" | socat STDIN UDP:127.0.0.1:" . $BQTERM_LOCAL_CONTROL_PORT . " &")
+    elseif !empty($KITTY_LISTEN_ON)
         silent! call system("kitty @ disable-ligatures -m=id:" . $KITTY_WINDOW_ID . " always &")
     elseif $TERM_PROGRAM == "iTerm.app"
         silent! call writefile(["\033]50;SetProfile=Default\007"], '/dev/stdout', 'b')
