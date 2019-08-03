@@ -120,6 +120,9 @@ Plug 'tpope/vim-surround'
 Plug 'blahgeek/fcitx.vim', {'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'fcitx.vim')
 
+Plug 'junegunn/vim-easy-align'
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 " }}}
 
 " Tools Integration Plugins {{{
