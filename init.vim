@@ -6,7 +6,6 @@ let s:use_lsp = 0
 let s:use_deoplete = 1
 let s:use_ale = 1
 let s:use_ycm = 0
-let s:use_coc = 0
 let s:lazy_loads = []
 
 call plug#begin('~/.config/nvim/plugged')
@@ -90,8 +89,8 @@ Plug 'lifepillar/vim-solarized8'
 " Misc Editing Plugins {{{
 Plug 'tpope/vim-repeat'
 
-let g:multi_cursor_exit_from_insert_mode = 0
-Plug 'terryma/vim-multiple-cursors'
+" let g:multi_cursor_exit_from_insert_mode = 0
+" Plug 'terryma/vim-multiple-cursors'
 
 let g:AutoPairsMultilineClose = 0
 let g:AutopairsShortcutToggle = ''
@@ -162,7 +161,7 @@ Plug 'vimoutliner/vimoutliner'
 
 if s:use_deoplete == 1
 " Deoplete {{{
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' , 'tag': '*'}
 " source from syntax file
 Plug 'Shougo/neco-syntax', { 'do': ':UpdateRemotePlugins' }
 " I would manually enable it on InsertEnter
@@ -317,53 +316,6 @@ let g:airline#extensions#ycm#enabled = 1
 
 nnoremap gd :YcmCompleter GoTo<CR>
 nnoremap gx :YcmCompleter FixIt<CR>
-" }}}
-endif
-
-if s:use_coc == 1
-" {{{ coc
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-
-inoremap <expr> <CR> pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
-inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-inoremap <silent><expr> <S-TAB> coc#refresh()
-
-nmap gd <Plug>(coc-definition)
-nmap gy <Plug>(coc-type-definition)
-nmap gi <Plug>(coc-implementation)
-nmap gr <Plug>(coc-references)
-nmap gh :call CocAction('doHover')<CR>
-nmap g? <Plug>(coc-diagnostic-info)
-nmap <F2> <Plug>(coc-rename)
-nmap <C-n>  <Plug>(coc-codeaction)
-nmap gx  <Plug>(coc-fix-current)
-setl formatexpr=CocAction('formatSelected')
-
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-" autocmd CursorHold * silent call CocActionAsync('doHover')
-
-command! -nargs=0 Format :call CocAction('format')
-
-call add(g:airline_extensions, 'coc')
-let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
-let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-
-function! _GetCurrentFunction()
-    if !exists('b:coc_current_function')
-        return ''
-    endif
-    return b:coc_current_function
-endfunction
-
-function! _GetLspStatus()
-    if !exists('g:coc_status')
-        return ''
-    endif
-    return g:coc_status
-endfunction
-
 " }}}
 endif
 
