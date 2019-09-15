@@ -3,7 +3,8 @@ scriptencoding utf-8
 set shell=/bin/bash
 
 let s:use_lsp = 0
-let s:use_deoplete = 1
+let s:use_deoplete = 0
+let s:use_mucomplete = 1
 let s:use_ale = 1
 let s:use_ycm = 0
 let s:lazy_loads = []
@@ -43,6 +44,16 @@ endfunction
 function _GetLspStatus()
     return ''
 endfunction
+function _GetCompletionSource()
+    return ''
+endfunction
+function _GetCompletionSourceWrapper()
+    if w:airline_current_mode ==# 'INSERT COMPL'
+        return _GetCompletionSource()
+    else
+        return ''
+    endif
+endfunction
 
 function! _AirlineInit()
     call airline#parts#define_function('current_function', '_GetCurrentFunction')
@@ -51,6 +62,9 @@ function! _AirlineInit()
 
     call airline#parts#define_function('lsp_status', '_GetLspStatus')
     let g:airline_section_x = airline#section#create_right(['lsp_status', 'filetype'])
+
+    call airline#parts#define_function('completion_source', '_GetCompletionSourceWrapper')
+    let g:airline_section_a = airline#section#create_left(['mode', 'completion_source', 'crypt', 'paste', 'capslock'])
 
     hi! link airline_filesection airline_b
     hi! link airline_funcsection airline_c
@@ -172,12 +186,33 @@ inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
-" close preview window after insertion
-augroup auto_close_preview_window
-    autocmd!
-    autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-    " autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-augroup END
+" }}}
+endif
+
+if s:use_mucomplete == 1
+" {{{ Mucomplete
+let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#buffer_relative_paths = 1
+" user is completefunc, which is set to ale#completion#OmniFunc
+let g:mucomplete#chains = {
+            \ 'default': ['path', 'user', 'omni', 'dict', 'keyn'],
+            \ }
+let g:mucomplete#completion_delay = 100
+" let g:mucomplete#minimum_prefix_length = 0
+" One char or ->, ., ::
+let g:mucomplete#can_complete = {
+            \ 'default': {
+            \    'user': { t -> strlen(&completefunc) > 0 && t =~# '\%(\k\|->\|::\|\.\)$' }
+            \    }
+            \  }
+inoremap <expr> <CR> pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
+
+Plug 'lifepillar/vim-mucomplete'
+
+function! _GetCompletionSource()
+    return get(g:mucomplete#msg#short_methods,
+                \        get(g:, 'mucomplete_current_method', ''), '')
+endfunction
 " }}}
 endif
 
@@ -280,6 +315,8 @@ nnoremap <silent> gd :ALEGoToDefinition<CR>
 nnoremap <silent> gD :ALEGoToDefinitionInSplit<CR>
 nnoremap <silent> gr :ALEFindReferences<CR>
 nnoremap <silent> gx :ALEFix<CR>
+
+set completefunc=ale#completion#OmniFunc
 " }}}
 endif
 
@@ -402,6 +439,7 @@ set updatetime=300
 set signcolumn=yes
 set lazyredraw
 set tags+=.git/tags
+set completeopt+=menuone,noselect
 " }}}
 
 " FZF {{{
@@ -530,6 +568,13 @@ function s:update_header_modified_time()
     execute '1,10s/Last Modified.* \zs\d\+-\d\+-\d\+\ze$/' . l:now . '/i'
     call winrestview(l:save_view)
 endfunction
+
+" close preview window after insertion
+augroup auto_close_preview_window
+    autocmd!
+    autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+    " autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+augroup END
 
 augroup vimrc_augroup
     autocmd!
