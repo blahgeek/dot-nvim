@@ -29,7 +29,7 @@ Plug 'airblade/vim-rooter'
 set noshowmode
 
 let g:lightline = {
-            \ 'colorscheme': 'solarized',
+            \ 'colorscheme': 'solarized_mod',
             \ }
 
 Plug 'itchyny/lightline.vim'
@@ -46,10 +46,10 @@ if s:use_ale == 1
                 \ }
 
     let g:lightline.component_type = {
-                \     'linter_checking': 'left',
+                \     'linter_checking': 'loading',
                 \     'linter_warnings': 'warning',
                 \     'linter_errors': 'error',
-                \     'linter_ok': 'left',
+                \     'linter_ok': 'success',
                 \ }
 endif
 
