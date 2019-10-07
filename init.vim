@@ -3,8 +3,8 @@ scriptencoding utf-8
 set shell=/bin/bash
 
 let s:use_lsp = 0
-let s:use_deoplete = 0
-let s:use_mucomplete = 1
+let s:use_deoplete = 1
+let s:use_mucomplete = 0
 let s:use_ale = 1
 let s:use_ycm = 0
 let s:lazy_loads = []
