@@ -26,68 +26,44 @@ Plug 'airblade/vim-rooter'
 "}}}
 
 " Appearance {{{
-
-" See ColorScheme section
-" let g:airline_powerline_fonts = 1
-let g:airline_symbols_ascii = 1
-let g:airline#extensions#disable_rtp_load = 1
-let g:airline_extensions = []
-let g:airline#extensions#default#layout = [
-            \ [ 'a', 'filesection', 'funcsection'],
-            \ [ 'x', 'y', 'error', 'warning' ]
-            \ ]
-
-" Override these function to provide info
-function _GetCurrentFunction()
-    return ''
-endfunction
-function _GetLspStatus()
-    return ''
-endfunction
-function _GetCompletionSource()
-    return ''
-endfunction
-function _GetCompletionSourceWrapper()
-    if w:airline_current_mode ==# 'INSERT COMPL'
-        return _GetCompletionSource()
-    else
-        return ''
-    endif
-endfunction
-
-function! _AirlineInit()
-    call airline#parts#define_function('current_function', '_GetCurrentFunction')
-    let g:airline_section_filesection = airline#section#create(['%<', 'file', ' ', 'readonly'])
-    let g:airline_section_funcsection = airline#section#create(['%<', 'current_function'])
-
-    call airline#parts#define_function('lsp_status', '_GetLspStatus')
-    let g:airline_section_x = airline#section#create_right(['lsp_status', 'filetype'])
-
-    call airline#parts#define_function('completion_source', '_GetCompletionSourceWrapper')
-    let g:airline_section_a = airline#section#create_left(['mode', 'completion_source', 'crypt', 'paste', 'capslock'])
-
-    hi! link airline_filesection airline_b
-    hi! link airline_funcsection airline_c
-    hi! link airline_filesection_red airline_b_red
-endfunction
-
-augroup vimrc_airline_init
-    au User AirlineAfterInit call _AirlineInit()
-augroup END
-
-let g:airline#extensions#default#section_truncate_width = {
-            \ 'b': 79,
-            \ 'x': 60,
-            \ 'y': 45,
-            \ 'warning': 60,
-            \ 'error': 60,
-            \ }
-let g:airline#extensions#branch#enabled = 0
-let g:airline#extensions#whitespace#enabled = 0
-" let g:airline#extensions#tagbar#enabled = 1
 set noshowmode
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+
+let g:lightline = {
+            \ 'colorscheme': 'solarized',
+            \ }
+
+Plug 'itchyny/lightline.vim'
+
+if s:use_ale == 1
+
+    Plug 'maximbaz/lightline-ale'
+
+    let g:lightline.component_expand = {
+                \  'linter_checking': 'lightline#ale#checking',
+                \  'linter_warnings': 'lightline#ale#warnings',
+                \  'linter_errors': 'lightline#ale#errors',
+                \  'linter_ok': 'lightline#ale#ok',
+                \ }
+
+    let g:lightline.component_type = {
+                \     'linter_checking': 'left',
+                \     'linter_warnings': 'warning',
+                \     'linter_errors': 'error',
+                \     'linter_ok': 'left',
+                \ }
+endif
+
+let g:lightline.active = {
+            \ 'right': [
+            \    ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
+            \    ['percent'],
+            \    ['fileformat', 'fileencoding', 'filetype'],
+            \   ]
+            \ }
+
+let g:lightline.inactive = {
+            \ 'left': [ [ 'relativepath' ] ],
+            \ 'right': [ [ 'percent' ] ] }
 
 Plug 'lifepillar/vim-solarized8'
 " Plug 'altercation/vim-colors-solarized'
@@ -209,10 +185,6 @@ inoremap <expr> <CR> pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
 
 Plug 'lifepillar/vim-mucomplete'
 
-function! _GetCompletionSource()
-    return get(g:mucomplete#msg#short_methods,
-                \        get(g:, 'mucomplete_current_method', ''), '')
-endfunction
 " }}}
 endif
 
@@ -247,9 +219,6 @@ let g:LanguageClient_fzfOptions = ''
 let g:LanguageClient_hasSnippetSupport = 0
 let g:LanguageClient_hoverPreview = 'Always'
 
-call add(g:airline_extensions, 'languageclient')
-let g:airline#extensions#languageclient#enabled = 1
-
 nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
@@ -264,13 +233,6 @@ augroup LanguageClient_currentFunction_augroup
                 \ {'handle': v:false},
                 \ '_LanguageClient_CurrentFunction_callback')
 augroup END
-
-function! _GetCurrentFunction()
-    if !exists('b:languageclient_current_function')
-        return ''
-    endif
-    return b:languageclient_current_function
-endfunction
 
 " }}}
 endif
@@ -304,9 +266,6 @@ let g:ale_python_pyls_config = {
             \ }
             \}
 let g:ale_java_javalsp_executable = '/Users/blahgeek/Code/java-language-server/dist/mac/bin/launcher'
-
-call add(g:airline_extensions, 'ale')
-let g:airline#extensions#ale#enabled = 1
 
 Plug 'w0rp/ale'
 
@@ -347,9 +306,6 @@ let g:ycm_rust_src_path = '/usr/local/share/rust/rust_src/'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --rust-completer',
             \ 'on': []}
 let s:lazy_loads = add(s:lazy_loads, 'YouCompleteMe')
-
-call add(g:airline_extensions, 'ycm')
-let g:airline#extensions#ycm#enabled = 1
 
 nnoremap gd :YcmCompleter GoTo<CR>
 nnoremap gx :YcmCompleter FixIt<CR>
