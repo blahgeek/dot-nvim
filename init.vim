@@ -54,6 +54,8 @@ if s:use_ale == 1
 endif
 
 let g:lightline.active = {
+            \ 'left': [ [ 'mode', 'paste' ],
+            \           [ 'readonly', 'relativepath', 'modified' ] ],
             \ 'right': [
             \    ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
             \    ['percent'],
