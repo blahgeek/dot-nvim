@@ -1,6 +1,2 @@
-#ifndef %GUARD%
-#define %GUARD%
+#pragma once
 
-%HERE%
-
-#endif
