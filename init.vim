@@ -268,6 +268,7 @@ let g:ale_python_pyls_config = {
             \ }
             \}
 let g:ale_java_javalsp_executable = '/Users/blahgeek/Code/java-language-server/dist/mac/bin/launcher'
+let g:ale_cpp_clangd_options = '--background-index=false'
 
 Plug 'w0rp/ale'
 
