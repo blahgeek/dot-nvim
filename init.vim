@@ -245,6 +245,7 @@ let g:ale_linters = {
             \    'c': ['clangd'],
             \    'cpp': ['clangd'],
             \    'objc': ['clangd'],
+            \    'objcpp': ['clangd'],
             \    'rust': ['rls'],
             \    'python': ['flake8', 'mypy', 'pyls'],
             \    'go': ['go build', 'gofmt'],
