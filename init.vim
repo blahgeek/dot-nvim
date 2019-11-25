@@ -409,11 +409,7 @@ function s:FZFSinkWrapper(cmd, target)
 endfunction
 
 function s:FZFFiles()
-    let l:source = 'git ls-files -c --exclude-standard --recurse-submodules; git ls-files -o --exclude-standard'
-    " fallback to ag if not a git repo
-    if fugitive#head() ==# ''
-        let l:source = 'ag -g ""'
-    endif
+    let l:source = 'fd --type file'
     let g:fzf_action = {
                 \ 'ctrl-s': 'split',
                 \ 'ctrl-v': 'vsplit' }
