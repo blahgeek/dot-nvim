@@ -153,7 +153,7 @@ Plug 'vimoutliner/vimoutliner'
 
 if s:use_deoplete == 1
 " Deoplete {{{
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' , 'tag': '*'}
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " source from syntax file
 Plug 'Shougo/neco-syntax', { 'do': ':UpdateRemotePlugins' }
 " I would manually enable it on InsertEnter
